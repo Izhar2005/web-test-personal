@@ -1,320 +1,68 @@
-# web-test-personal
-/* Import Poppins font is done in HTML */
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Temukan Kepribadian Aslimu!</title>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <button id="darkModeToggle" aria-label="Toggle Dark Mode" title="Mode Gelap/Terang">🌙</button>
 
-/* Root variables for light and dark themes */
-:root {
-  --color-bg-start: #a3cef1; /* blue pastel */
-  --color-bg-end: #cdb4db; /* purple pastel */
-  --color-primary: #f6bd60; /* soft orange */
-  --color-primary-dark: #d99a3f;
-  --color-text: #333;
-  --color-text-light: #fff;
-  --color-progress-bg: #e0e0e0;
-  --color-progress-fill: var(--color-primary);
-  --font-family: 'Poppins', sans-serif;
-  --transition-speed: 0.3s;
-}
+    <main>
+        <!-- Landing Page -->
+        <section id="landing" class="page active">
+            <h1>Temukan Kepribadian Aslimu!</h1>
+            <p class="description">
+                Apakah kamu seorang Introvert, Ekstrovert, atau Ambivert? Temukan jawabannya melalui tes kepribadian ini!
+            </p>
+            <div class="personality-types">
+                <div class="type introvert">
+                    <h2>Introvert</h2>
+                    <p>Orang yang lebih suka menyendiri dan mendapatkan energi dari waktu sendiri.</p>
+                </div>
+                <div class="type extrovert">
+                    <h2>Ekstrovert</h2>
+                    <p>Orang yang energik dan mendapatkan energi dari interaksi sosial.</p>
+                </div>
+                <div class="type ambivert">
+                    <h2>Ambivert</h2>
+                    <p>Gabungan antara introvert dan ekstrovert, fleksibel dalam berbagai situasi.</p>
+                </div>
+            </div>
+            <button id="startTestBtn" class="btn-primary">Mulai Tes</button>
+        </section>
 
-body {
-  margin: 0;
-  font-family: var(--font-family);
-  background: linear-gradient(135deg, var(--color-bg-start), var(--color-bg-end));
-  color: var(--color-text);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-}
+        <!-- Quiz Section -->
+        <section id="quiz" class="page">
+            <div id="progressContainer">
+                <div id="progressBar"></div>
+            </div>
+            <div id="questionContainer" class="fade-in">
+                <h2 id="questionText"></h2>
+                <div id="answers"></div>
+            </div>
+        </section>
 
-main {
-  background: rgba(255 255 255 / 0.85);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  max-width: 600px;
-  width: 100%;
-  padding: 2rem;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-}
+        <!-- Result Section -->
+        <section id="result" class="page">
+            <h2>Hasil Tes Kepribadianmu</h2>
+            <div id="resultType" class="result-type"></div>
+            <div id="resultDescription" class="result-description"></div>
+            <div id="resultPercentages" class="result-percentages"></div>
+            <div id="resultIcon" class="result-icon"></div>
+            <div class="result-buttons">
+                <button id="retryBtn" class="btn-secondary">Ulangi Tes</button>
+                <button id="shareBtn" class="btn-secondary">Bagikan Hasil</button>
+            </div>
+        </section>
+    </main>
 
-/* Dark mode styles */
-body.dark-mode {
-  background: #1e1e2f;
-  color: var(--color-text-light);
-}
-
-body.dark-mode main {
-  background: #2c2c44;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
-}
-
-/* Dark mode toggle button */
-#darkModeToggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background: var(--color-primary);
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: var(--color-text-light);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  transition: background-color var(--transition-speed);
-  z-index: 1000;
-}
-
-#darkModeToggle:hover {
-  background: var(--color-primary-dark);
-}
-
-/* Pages */
-.page {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.page.active {
-  display: flex;
-}
-
-/* Landing Page */
-#landing h1 {
-  font-weight: 600;
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-#landing .description {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  color: #555;
-}
-
-.personality-types {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.type {
-  background: var(--color-primary);
-  color: var(--color-text-light);
-  border-radius: 10px;
-  padding: 1rem;
-  flex: 1 1 30%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: background-color var(--transition-speed);
-}
-
-.type.introvert {
-  background: #6a8caf; /* muted blue */
-}
-
-.type.extrovert {
-  background: #f6bd60; /* soft orange */
-  color: #3a2e0f;
-}
-
-.type.ambivert {
-  background: #b39ddb; /* light purple */
-  color: #3a2e0f;
-}
-
-.type h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
-.type p {
-  font-size: 0.9rem;
-  line-height: 1.3;
-}
-
-/* Buttons */
-.btn-primary, .btn-secondary {
-  cursor: pointer;
-  border: none;
-  border-radius: 30px;
-  padding: 0.75rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  transition: background-color var(--transition-speed), color var(--transition-speed);
-  user-select: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
-}
-
-.btn-primary:hover {
-  background-color: var(--color-primary-dark);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-}
-
-.btn-secondary:hover {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
-}
-
-/* Quiz Section */
-#progressContainer {
-  width: 100%;
-  height: 12px;
-  background-color: var(--color-progress-bg);
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
-}
-
-#progressBar {
-  height: 100%;
-  width: 0%;
-  background-color: var(--color-progress-fill);
-  transition: width 0.4s ease;
-  border-radius: 10px;
-}
-
-/* Question container */
-#questionContainer {
-  width: 100%;
-}
-
-#questionText {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  min-height: 60px;
-}
-
-/* Answers */
-#answers {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.answer-btn {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
-  border: none;
-  border-radius: 30px;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: background-color var(--transition-speed);
-  user-select: none;
-  text-align: center;
-}
-
-.answer-btn:hover {
-  background-color: var(--color-primary-dark);
-}
-
-/* Result Section */
-#result h2 {
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.result-type {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.result-description {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  padding: 0 1rem;
-}
-
-.result-percentages {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-.result-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-}
-
-/* Result buttons */
-.result-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* Animations */
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .personality-types {
-    flex-direction: column;
-  }
-  .type {
-    flex: 1 1 100%;
-  }
-  main {
-    padding: 1.5rem 1rem;
-  }
-}
-
-/* Slide animation for quiz questions */
-.slide-in-right {
-  animation: slideInRight 0.4s ease forwards;
-}
-
-.slide-out-left {
-  animation: slideOutLeft 0.4s ease forwards;
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideOutLeft {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-}
-
+    <script src="script.js"></script>
+</body>
+</html>
